@@ -9,15 +9,19 @@ public class Igra {
 	public int steviloCrnih;
 	public int steviloBelih;
 	public Igralec [][] tabla;
-	public static int[][] smeri = {{0,1}, {0,-1}, {1,0}, {-1,0}, {1,1},{-1, -1},{1,-1},{-1,1}};
+	public static int[][] smeri = {{0,1}, {0,-1}, {1,0}, {-1,0}, {1,1}, {-1,-1}, {1,-1}, {-1,1}};
 	public Igralec naPotezi;
 
 	public static void main(String[] args) {
 		Igra igra = new Igra();
 		Poteza p1 = new Poteza(2, 3);
 		Poteza p2 = new Poteza(2, 4);
+		Poteza p3 = new Poteza(2, 5);
+		Poteza p4 = new Poteza(1, 4);
 		igra.izvediPotezo(p1);
 		igra.izvediPotezo(p2);
+		igra.izvediPotezo(p3);
+		igra.izvediPotezo(p4);
 		igra.izpisPlosce();
 		System.out.println(igra.izracunajMozne());
 	}
@@ -71,6 +75,8 @@ public class Igra {
 		int y = p.getY();
 		Igralec nasprotnik = naPotezi.nasprotni();
 		if (izracunajMozne().contains(p)) {
+			if (naPotezi == Igralec.CRNI)steviloCrnih += 1;
+			else steviloBelih += 1;
 			for(int k = 0; k < 8; k++) {
 				int a = 1;
 				while (true) {
@@ -85,11 +91,11 @@ public class Igra {
 				if(u >= 0 && u < 8 && v >= 0 && v < 8 && tabla[u][v] == naPotezi) {
 					for(int i = 0; i < a; i++) tabla[x + i * smeri[k][0]][y + i * smeri[k][1]] = naPotezi;
 					if (naPotezi == Igralec.CRNI) {
-						steviloCrnih += a;
+						steviloCrnih += a - 1;
 						steviloBelih -= a - 1;
 					}
 					else {
-						steviloBelih += a;
+						steviloBelih += a - 1;
 						steviloCrnih -= a - 1;
 					}
 				}
@@ -108,13 +114,23 @@ public class Igra {
 		return false;
 	}
 	
-	public void zmaga() {
-		if(konec()) {
-			if(steviloCrnih < steviloBelih) System.out.println("Zmagal je BELI igralec!");
-			else if(steviloCrnih > steviloBelih)System.out.println("Zmagal je ČRNI igralec!");
-			else System.out.println("NEODLOČENO...");
+	public Stanje stanje() {
+		//Ali imamo zmagovalca?
+		if (konec()) {
+			if(steviloCrnih < steviloBelih) return Stanje.ZMAGA_BELI;
+			else if(steviloCrnih > steviloBelih) return Stanje.ZMAGA_CRNI;
+			else return Stanje.NEODLOCENO;
 		}
+		return Stanje.V_TEKU;
 	}
+	
+//	public void zmaga() {
+//		if(konec()) {
+//			if(steviloCrnih < steviloBelih) System.out.println("Zmagal je BELI igralec!");
+//			else if(steviloCrnih > steviloBelih)System.out.println("Zmagal je ČRNI igralec!");
+//			else System.out.println("NEODLOČENO...");
+//		}
+//	}
 
 	private void izpisPlosce() {
 		for(int i = 0; i < 8; i++) {

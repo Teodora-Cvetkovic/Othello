@@ -109,8 +109,12 @@ public class Igra {
 	public boolean konec() {
 		if (izracunajMozne().isEmpty()) {
 			naPotezi = naPotezi.nasprotni();
-			if (izracunajMozne().isEmpty()) return true;
+			if (izracunajMozne().isEmpty()) {
+				naPotezi = naPotezi.nasprotni();
+				return true;
+			}
 		}
+		naPotezi = naPotezi.nasprotni();
 		return false;
 	}
 	

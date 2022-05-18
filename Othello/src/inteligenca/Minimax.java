@@ -6,9 +6,7 @@ import splosno.Poteza;
 
 import java.util.List;
 
-import inteligenca.OcenjenaPoteza;
-
-public class Minimax {
+public class Minimax extends Inteligenca{
 
 	private static final int ZMAGA = 100;
 	private static final int ZGUBA = - ZMAGA;
@@ -17,8 +15,14 @@ public class Minimax {
 	private int globina;
 	
 	public Minimax (int globina) {
-//		super("minimax globina " + globina);
+		super();
 		this.globina = globina;
+	}
+	
+	@Override
+	public Poteza izberiPotezo(Igra igra) {
+		OcenjenaPoteza najboljsa = minimax(igra, this.globina, igra.naPotezi);
+		return najboljsa.poteza;
 	}
 	
 	public OcenjenaPoteza minimax(Igra igra, int globina, Igralec jaz) {
@@ -38,7 +42,14 @@ public class Minimax {
 				else ocena = ZGUBA;
 				break;
 			case NEODLOCENO: ocena = NEODLOCENO; break;
+			default:
+				if(globina == 1) ocena = OceniPozicijo.oceniPozicijo(kopijaIgre, jaz);
+				else ocena = minimax(kopijaIgre, globina - 1, jaz).ocena;
 			}
+			if(najboljsaPoteza == null
+					|| jaz == igra.naPotezi && ocena > najboljsaPoteza.ocena
+					|| jaz != igra.naPotezi && ocena < najboljsaPoteza.ocena)
+				najboljsaPoteza = new OcenjenaPoteza(p, ocena);
 		}
 		return najboljsaPoteza;
 	}

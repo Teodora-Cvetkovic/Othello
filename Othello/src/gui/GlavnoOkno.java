@@ -24,6 +24,7 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 	private IgralnoPolje polje;
 	
 	private JLabel status;
+	private JLabel stDiskov;
 	
 	private JMenuItem igraClovekRacunalnik;
 	private JMenuItem igraRacunalnikClovek;
@@ -82,6 +83,18 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 		
 		status.setText("Izberite igro!");
 		
+		//šteje diske
+		stDiskov = new JLabel();
+		stDiskov.setFont(new Font(status.getFont().getName(),
+			    				  status.getFont().getStyle(),
+			    				  20));
+		GridBagConstraints stDiskov_layout = new GridBagConstraints();
+		stDiskov_layout.gridx = 0;
+		stDiskov_layout.gridy = 2;
+		stDiskov_layout.anchor = GridBagConstraints.CENTER;
+		getContentPane().add(stDiskov, stDiskov_layout);
+		
+		stDiskov.setText("Črni: 2 * Beli: 2");
 	}
 	
 	@Override
@@ -134,6 +147,7 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 			case V_TEKU: 
 				status.setText("Na potezi je " + Vodja.igra.naPotezi.nasprotni() + 
 						" - " + Vodja.kdoIgra.get(Vodja.igra.naPotezi.nasprotni())); 
+				stDiskov.setText("Črni: " + Vodja.igra.steviloCrnih + " * Beli: " + Vodja.igra.steviloBelih);
 				break;
 			case ZMAGA_CRNI: 
 				status.setText("Zmagal je Črni - " + 

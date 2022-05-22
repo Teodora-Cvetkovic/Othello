@@ -5,6 +5,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.EnumMap;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -12,7 +13,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import logika.Igralec;
+import splosno.KdoIgra;
 import vodja.Vodja;
+import vodja.VrstaIgralca;
 
 @SuppressWarnings("serial")
 public class GlavnoOkno extends JFrame implements ActionListener{
@@ -82,8 +86,42 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+		if(e.getSource() == igraClovekRacunalnik) {
+			Vodja.vrstaIgralca = new EnumMap<Igralec, VrstaIgralca>(Igralec.class);
+			Vodja.vrstaIgralca.put(Igralec.CRNI, VrstaIgralca.C);
+			Vodja.vrstaIgralca.put(Igralec.BELI, VrstaIgralca.R);
+			Vodja.kdoIgra = new EnumMap<Igralec, KdoIgra>(Igralec.class);
+			Vodja.kdoIgra.put(Igralec.CRNI, new KdoIgra("Človek"));
+			Vodja.kdoIgra.put(Igralec.BELI, Vodja.racunalnikovaInteligenca);
+			Vodja.igramoNovoIgro();
+		}
+		else if (e.getSource() == igraRacunalnikClovek) {
+			Vodja.vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
+			Vodja.vrstaIgralca.put(Igralec.CRNI, VrstaIgralca.R); 
+			Vodja.vrstaIgralca.put(Igralec.BELI, VrstaIgralca.C);
+			Vodja.kdoIgra = new EnumMap<Igralec,KdoIgra>(Igralec.class);
+			Vodja.kdoIgra.put(Igralec.CRNI, Vodja.racunalnikovaInteligenca);
+			Vodja.kdoIgra.put(Igralec.BELI, new KdoIgra("Človek")); 
+			Vodja.igramoNovoIgro();
+		}
+		else if (e.getSource() == igraClovekClovek) {
+			Vodja.vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
+			Vodja.vrstaIgralca.put(Igralec.CRNI, VrstaIgralca.C); 
+			Vodja.vrstaIgralca.put(Igralec.BELI, VrstaIgralca.C);
+			Vodja.kdoIgra = new EnumMap<Igralec,KdoIgra>(Igralec.class);
+			Vodja.kdoIgra.put(Igralec.CRNI, new KdoIgra("Človek")); 
+			Vodja.kdoIgra.put(Igralec.BELI, new KdoIgra("Človek"));
+			Vodja.igramoNovoIgro();
+		}
+		else if (e.getSource() == igraRacunalnikRacunalnik) {
+			Vodja.vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
+			Vodja.vrstaIgralca.put(Igralec.CRNI, VrstaIgralca.R); 
+			Vodja.vrstaIgralca.put(Igralec.BELI, VrstaIgralca.R);
+			Vodja.kdoIgra = new EnumMap<Igralec,KdoIgra>(Igralec.class);
+			Vodja.kdoIgra.put(Igralec.CRNI, Vodja.racunalnikovaInteligenca);
+			Vodja.kdoIgra.put(Igralec.BELI, Vodja.racunalnikovaInteligenca); 
+			Vodja.igramoNovoIgro();
+		}
 	}
 
 	public void osveziGUI() {
@@ -92,18 +130,18 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 		}
 		else {
 			switch(Vodja.igra.stanje()) {
-			case NEODLOCENO: status.setText("NeodloÄ�eno!"); break;
+			case NEODLOCENO: status.setText("Neodločeno!"); break;
 			case V_TEKU: 
-				status.setText("Na potezi je " + Vodja.igra.naPotezi() + 
-						" - " + Vodja.kdoIgra.get(Vodja.igra.naPotezi()).ime()); 
+				status.setText("Na potezi je " + Vodja.igra.naPotezi.nasprotni() + 
+						" - " + Vodja.kdoIgra.get(Vodja.igra.naPotezi.nasprotni())); 
 				break;
 			case ZMAGA_CRNI: 
-				status.setText("Zmagal je O - " + 
-						Vodja.kdoIgra.get(Vodja.igra.naPotezi().nasprotnik()).ime());
+				status.setText("Zmagal je Črni - " + 
+						Vodja.kdoIgra.get(Vodja.igra.naPotezi.nasprotni()));
 				break;
 			case ZMAGA_BELI: 
-				status.setText("Zmagal je X - " + 
-						Vodja.kdoIgra.get(Vodja.igra.naPotezi().nasprotnik()).ime());
+				status.setText("Zmagal je Beli - " + 
+						Vodja.kdoIgra.get(Vodja.igra.naPotezi.nasprotni()));
 				break;
 			}
 		}

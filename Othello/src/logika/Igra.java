@@ -1,6 +1,7 @@
 package logika;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import splosno.Poteza;
 
@@ -11,17 +12,18 @@ public class Igra {
 	public Polje [][] tabla;
 	public static int[][] smeri = {{0,1}, {0,-1}, {1,0}, {-1,0}, {1,1}, {-1,-1}, {1,-1}, {-1,1}};
 	public Igralec naPotezi;
+	public HashSet<Poteza> izvedenePoteze;
 
 	public static void main(String[] args) {
 		Igra igra = new Igra();
-//		Poteza p1 = new Poteza(2, 3);
-//		Poteza p2 = new Poteza(2, 4);
-//		Poteza p3 = new Poteza(2, 5);
-//		Poteza p4 = new Poteza(1, 4);
-//		igra.izvediPotezo(p1);
-//		igra.izvediPotezo(p2);
-//		igra.izvediPotezo(p3);
-//		igra.izvediPotezo(p4);
+		Poteza p1 = new Poteza(2, 3);
+		Poteza p2 = new Poteza(2, 4);
+		Poteza p3 = new Poteza(2, 5);
+		Poteza p4 = new Poteza(1, 4);
+		igra.izvediPotezo(p1);
+		igra.izvediPotezo(p2);
+		igra.izvediPotezo(p3);
+		igra.izvediPotezo(p4);
 		igra.izpisPlosce();
 		System.out.println(igra.izracunajMozne());
 	}
@@ -37,6 +39,7 @@ public class Igra {
 			}
 		}
 		naPotezi = Igralec.CRNI;
+		izvedenePoteze  = new HashSet<Poteza>();
 	}
 	
 	public List<Poteza> izracunajMozne () {
@@ -69,6 +72,7 @@ public class Igra {
 	}
 	
 	public boolean izvediPotezo(Poteza p) {
+		if(p == null) return false;
 		int x = p.getX();
 		int y = p.getY();
 		Igralec nasprotnik = naPotezi.nasprotni();
@@ -98,6 +102,7 @@ public class Igra {
 					}
 				}
 			}
+			izvedenePoteze.add(p);
 			naPotezi = nasprotnik;
 			return true;
 		}
@@ -129,6 +134,10 @@ public class Igra {
 			if (!izracunajMozne().isEmpty()) return Stanje.BLOKIRANO;
 		}
 		return Stanje.V_TEKU;
+	}
+	
+	public HashSet<Poteza> mnozicaIzvedenihPotez() {
+		return izvedenePoteze;
 	}
 	
 //	public void zmaga() {

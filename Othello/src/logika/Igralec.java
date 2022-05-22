@@ -8,8 +8,8 @@ public enum Igralec {
 		else return CRNI;
 	}
 	
-//	public Polje getPolje() {
-//		if (this == CRNI) return Polje.CRNO;   ***kasneje***
-//		else return Polje.BELO;
-//	}
+	public Polje getPolje() {
+		if (this == CRNI) return Polje.CRNO;
+		else return Polje.BELO;
+	}
 }

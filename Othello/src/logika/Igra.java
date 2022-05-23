@@ -42,6 +42,19 @@ public class Igra {
 		izvedenePoteze  = new HashSet<Poteza>();
 	}
 	
+	public Igra(Igra igra) {
+		this.tabla = new Polje[8][8];
+		this.steviloCrnih = igra.steviloCrnih;
+		this.steviloBelih = igra.steviloBelih;
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				this.tabla[i][j] = igra.tabla[i][j];
+			}
+		}
+		this.naPotezi = igra.naPotezi;
+		this.izvedenePoteze  = igra.izvedenePoteze;
+	}
+	
 	public List<Poteza> izracunajMozne () {
 		List<Poteza> mozne = new ArrayList<Poteza>();
 		Igralec nasprotnik = naPotezi.nasprotni();

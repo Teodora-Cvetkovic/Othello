@@ -29,7 +29,7 @@ public class Minimax extends Inteligenca{
 		OcenjenaPoteza najboljsaPoteza = null;
 		List<Poteza> moznePoteze = igra.izracunajMozne();
 		for (Poteza p : moznePoteze) {
-			Igra kopijaIgre = igra;
+			Igra kopijaIgre = new Igra(igra);
 			kopijaIgre.izvediPotezo(p);
 			int ocena;
 			switch (kopijaIgre.stanje()) {

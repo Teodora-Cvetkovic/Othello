@@ -8,6 +8,7 @@ import javax.swing.SwingWorker;
 import gui.GlavnoOkno;
 import inteligenca.Inteligenca;
 import inteligenca.Minimax;
+import inteligencaMonteCarlo.InteligencaMonteCarlo;
 import logika.Igra;
 import logika.Igralec;
 import splosno.KdoIgra;
@@ -41,6 +42,7 @@ public class Vodja {
 			VrstaIgralca vrstaNaPotezi = vrstaIgralca.get(igralec);
 			switch (vrstaNaPotezi) {
 			case C: 
+				System.out.println("hi");
 				clovekNaVrsti = true;
 				break;
 			case R:
@@ -48,7 +50,8 @@ public class Vodja {
 				igrajRacunalnikovoPotezo();
 				break;
 			}
-		case BLOKIRANO:
+			break;
+		case BLOKIRANO: //preveri
 			Igralec nasprotni = igra.naPotezi.nasprotni();
 			VrstaIgralca vrstaNasprotni = vrstaIgralca.get(nasprotni);
 			switch (vrstaNasprotni) {
@@ -63,7 +66,7 @@ public class Vodja {
 		}
 	}
 	
-	public static Inteligenca racunalnikovaInteligenca = new Minimax(9);
+	public static Inteligenca racunalnikovaInteligenca = new Minimax(5);
 
 	public static void igrajRacunalnikovoPotezo() {
 		Igra zacetnaIgra = igra;
@@ -86,6 +89,30 @@ public class Vodja {
 		};
 		worker.execute();
 	}
+	
+//	public static InteligencaMonteCarlo racunalnikovaInteligenca = new InteligencaMonteCarlo();
+//
+//	public static void igrajRacunalnikovoPotezo() {
+//		Igra zacetnaIgra = igra;
+//		SwingWorker<Poteza, Void> worker = new SwingWorker<Poteza, Void>(){
+//			@Override
+//			protected Poteza doInBackground() {
+//				Poteza poteza = racunalnikovaInteligenca.chooseMove(zacetnaIgra);
+//				try {TimeUnit.SECONDS.sleep(1);} catch (Exception e) {};
+//				return poteza;
+//			}
+//			@Override
+//			protected void done() {
+//				Poteza poteza = null;
+//				try {poteza = get();} catch (Exception e) {};
+//				if(igra == zacetnaIgra) {
+//					igra.izvediPotezo(poteza);
+//					igramo();
+//				}
+//			}
+//		};
+//		worker.execute();
+//	}
 	
 	public static void igrajClovekovoPotezo(Poteza poteza) {
 		if(igra.izvediPotezo(poteza)) clovekNaVrsti = false;

@@ -1,25 +1,25 @@
 package inteligenca;
 
-import java.util.List;
-
 import logika.Igra;
 import logika.Igralec;
-import splosno.KdoIgra;
 import splosno.Poteza;
 
-public class Inteligenca extends KdoIgra {
-	
+import java.util.List;
+
+public class Minimax extends Inteligenca{
+
 	private static final int ZMAGA = 100;
 	private static final int ZGUBA = - ZMAGA;
 	private static final int NEODLOCENO = 0;
 	
 	private int globina;
-
-	public Inteligenca () {
-		super("Teodora Cvetković in Vesna Hozjan");
-		this.globina = 9;
+	
+	public Minimax (int globina) {
+		super();
+		this.globina = globina;
 	}
 	
+	@Override
 	public Poteza izberiPotezo(Igra igra) {
 		OcenjenaPoteza najboljsa = minimax(igra, this.globina, igra.naPotezi);
 		return najboljsa.poteza;
@@ -30,7 +30,7 @@ public class Inteligenca extends KdoIgra {
 		List<Poteza> moznePoteze = igra.izracunajMozne();
 		for (Poteza p : moznePoteze) {
 			Igra kopijaIgre = new Igra(igra);
-			kopijaIgre.izvediPotezo(p);
+			kopijaIgre.odigraj(p);
 			int ocena;
 			switch (kopijaIgre.stanje()) {
 			case ZMAGA_CRNI: 
@@ -53,5 +53,4 @@ public class Inteligenca extends KdoIgra {
 		}
 		return najboljsaPoteza;
 	}
-
 }

@@ -152,10 +152,12 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 			case ZMAGA_CRNI: 
 				status.setText("Zmagal je Črni - " + 
 						Vodja.kdoIgra.get(Vodja.igra.naPotezi.nasprotni()));
+				stDiskov.setText("Črni: " + Vodja.igra.steviloCrnih + " * Beli: " + Vodja.igra.steviloBelih);
 				break;
 			case ZMAGA_BELI: 
 				status.setText("Zmagal je Beli - " + 
 						Vodja.kdoIgra.get(Vodja.igra.naPotezi.nasprotni()));
+				stDiskov.setText("Črni: " + Vodja.igra.steviloCrnih + " * Beli: " + Vodja.igra.steviloBelih);
 				break;
 			}
 		}

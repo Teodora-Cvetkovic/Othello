@@ -6,9 +6,8 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.SwingWorker;
 
 import gui.GlavnoOkno;
+import inteligenca.AlfaBeta;
 import inteligenca.Inteligenca;
-import inteligenca.Minimax;
-import inteligencaMonteCarlo.InteligencaMonteCarlo;
 import logika.Igra;
 import logika.Igralec;
 import splosno.KdoIgra;
@@ -25,6 +24,7 @@ public class Vodja {
 	
 	public static boolean clovekNaVrsti = false;
 		
+	//požene novo igro
 	public static void igramoNovoIgro () {
 		igra = new Igra();
 		igramo();
@@ -42,7 +42,6 @@ public class Vodja {
 			VrstaIgralca vrstaNaPotezi = vrstaIgralca.get(igralec);
 			switch (vrstaNaPotezi) {
 			case C: 
-				System.out.println("hi");
 				clovekNaVrsti = true;
 				break;
 			case R:
@@ -51,7 +50,7 @@ public class Vodja {
 				break;
 			}
 			break;
-		case BLOKIRANO: //preveri
+		case BLOKIRANO: 
 			Igralec nasprotni = igra.naPotezi.nasprotni();
 			VrstaIgralca vrstaNasprotni = vrstaIgralca.get(nasprotni);
 			switch (vrstaNasprotni) {
@@ -66,7 +65,7 @@ public class Vodja {
 		}
 	}
 	
-	public static Inteligenca racunalnikovaInteligenca = new Minimax(5);
+	public static Inteligenca racunalnikovaInteligenca = new AlfaBeta(9);
 
 	public static void igrajRacunalnikovoPotezo() {
 		Igra zacetnaIgra = igra;
@@ -82,7 +81,7 @@ public class Vodja {
 				Poteza poteza = null;
 				try {poteza = get();} catch (Exception e) {};
 				if(igra == zacetnaIgra) {
-					igra.izvediPotezo(poteza);
+					igra.odigraj(poteza);
 					igramo();
 				}
 			}
@@ -90,32 +89,8 @@ public class Vodja {
 		worker.execute();
 	}
 	
-//	public static InteligencaMonteCarlo racunalnikovaInteligenca = new InteligencaMonteCarlo();
-//
-//	public static void igrajRacunalnikovoPotezo() {
-//		Igra zacetnaIgra = igra;
-//		SwingWorker<Poteza, Void> worker = new SwingWorker<Poteza, Void>(){
-//			@Override
-//			protected Poteza doInBackground() {
-//				Poteza poteza = racunalnikovaInteligenca.chooseMove(zacetnaIgra);
-//				try {TimeUnit.SECONDS.sleep(1);} catch (Exception e) {};
-//				return poteza;
-//			}
-//			@Override
-//			protected void done() {
-//				Poteza poteza = null;
-//				try {poteza = get();} catch (Exception e) {};
-//				if(igra == zacetnaIgra) {
-//					igra.izvediPotezo(poteza);
-//					igramo();
-//				}
-//			}
-//		};
-//		worker.execute();
-//	}
-	
 	public static void igrajClovekovoPotezo(Poteza poteza) {
-		if(igra.izvediPotezo(poteza)) clovekNaVrsti = false;
+		if(igra.odigraj(poteza)) clovekNaVrsti = false;
 		igramo();
 	}
 	

@@ -108,7 +108,7 @@ public class MonteCarloTreeSearch {
 					if (cont) continue;
 				}
 				Igra copyGame = game;
-				copyGame.izvediPotezo(p);
+				copyGame.odigraj(p);
 				Tree move = new Tree(copyGame, p, 0, 0, new ArrayList<Tree>());
 				move.parent = node;
 				playedMoves.add(move);

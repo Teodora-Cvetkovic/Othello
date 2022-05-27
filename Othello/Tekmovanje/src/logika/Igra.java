@@ -20,14 +20,15 @@ public class Igra {
 		Poteza p2 = new Poteza(2, 4);
 		Poteza p3 = new Poteza(2, 5);
 		Poteza p4 = new Poteza(1, 4);
-		igra.izvediPotezo(p1);
-		igra.izvediPotezo(p2);
-		igra.izvediPotezo(p3);
-		igra.izvediPotezo(p4);
+		igra.odigraj(p1);
+		igra.odigraj(p2);
+		igra.odigraj(p3);
+		igra.odigraj(p4);
 		igra.izpisPlosce();
 		System.out.println(igra.izracunajMozne());
 	}
 	
+	//naredi novo igro
 	public Igra() {
 		tabla = new Polje[8][8];
 		steviloCrnih = steviloBelih = 2;
@@ -42,6 +43,7 @@ public class Igra {
 		izvedenePoteze  = new HashSet<Poteza>();
 	}
 	
+	//naredi kopijo igre
 	public Igra(Igra igra) {
 		this.tabla = new Polje[8][8];
 		this.steviloCrnih = igra.steviloCrnih;
@@ -55,6 +57,7 @@ public class Igra {
 		this.izvedenePoteze  = igra.izvedenePoteze;
 	}
 	
+	//izračuna možne poteze
 	public List<Poteza> izracunajMozne () {
 		List<Poteza> mozne = new ArrayList<Poteza>();
 		Igralec nasprotnik = naPotezi.nasprotni();
@@ -84,7 +87,8 @@ public class Igra {
 		return mozne;
 	}
 	
-	public boolean izvediPotezo(Poteza p) {
+	//odigra potezo
+	public boolean odigraj(Poteza p) {
 		if(p == null) return false;
 		int x = p.getX();
 		int y = p.getY();
@@ -122,6 +126,7 @@ public class Igra {
 		return false;
 	}
 	
+	//preveri, ali je konec
 	public boolean konec() {
 		if (izracunajMozne().isEmpty()) {
 			naPotezi = naPotezi.nasprotni();
@@ -134,6 +139,7 @@ public class Igra {
 		return false;
 	}
 	
+	//pogleda stanje igre
 	public Stanje stanje() {
 		//Ali imamo zmagovalca?
 		if (konec()) {
@@ -141,7 +147,7 @@ public class Igra {
 			else if(steviloCrnih > steviloBelih) return Stanje.ZMAGA_CRNI;
 			else return Stanje.NEODLOCENO;
 		}
-		//Ali igralec na potezi ima možne poteze
+		//Ali igralec na potezi ima moÅ¾ne poteze
 		if (izracunajMozne().isEmpty()) {
 			naPotezi = naPotezi.nasprotni();
 			if (!izracunajMozne().isEmpty()) return Stanje.BLOKIRANO;
@@ -153,14 +159,7 @@ public class Igra {
 		return izvedenePoteze;
 	}
 	
-//	public void zmaga() {
-//		if(konec()) {
-//			if(steviloCrnih < steviloBelih) System.out.println("Zmagal je BELI igralec!");
-//			else if(steviloCrnih > steviloBelih)System.out.println("Zmagal je ČRNI igralec!");
-//			else System.out.println("NEODLOČENO...");
-//		}
-//	}
-	
+	//izpiše trenutno tablo
 	private void izpisPlosce() {
 		for(int i = 0; i < 8; i++) {
 			for(int j = 0; j < 8; j++) {
@@ -176,8 +175,6 @@ public class Igra {
 				}
 			}
 		}
-		System.out.println("Število črnih: " + steviloCrnih + "; Število belih: " + steviloBelih);
+		System.out.println("Å tevilo Ä�rnih: " + steviloCrnih + "; Å tevilo belih: " + steviloBelih);
 	}
 }
-
-//Prekopiraj class Igra bez metode main

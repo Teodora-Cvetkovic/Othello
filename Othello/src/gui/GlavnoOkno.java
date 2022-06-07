@@ -217,6 +217,9 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 			Vodja.kdoIgra.put(Igralec.BELI, Vodja.racunalnikovaInteligenca); 
 			Vodja.igramoNovoIgro();
 		}
+		else if(e.getSource() == pomoc) {
+			
+		}
 	}
 
 	public void osveziGUI() {

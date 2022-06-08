@@ -6,6 +6,7 @@ import logika.Polje;
 
 public class OceniPozicijo {
 
+	// ocenimo vsako polje
 	public static int oceniPozicijo(Igra igra, Igralec jaz) {
 		Polje[][] tabla = igra.tabla;
 		int ocena = 0;
@@ -13,6 +14,8 @@ public class OceniPozicijo {
 		int prestejB = 0;
 		for (int i = 0; i < 8 && (prestejC == 0 || prestejB == 0); i++) {
 			for (int j = 0; j < 8; j++) {
+				
+				// koti so najboljše pozicije
 				if((i == 0 || i == 7) && (j == 0 || j == 7)) {
 					switch(tabla[i][j]) {
 					case CRNO: prestejC += 3; break;
@@ -20,6 +23,8 @@ public class OceniPozicijo {
 					case PRAZNO: break;
 					}
 				}
+				
+				// polja pri kotih so bolj slabe pozicije
 				else if((i == 1 && j == 0) || (i == 0 & j == 1) || (i == 1 && j == 1)
 						|| (i == 6 && j == 0) || (i == 0 && j == 6) || (i == 6 && j == 6)
 						|| (i == 1 && j == 7) || (i == 7 && j == 1) || (i == 1 && j == 6)
@@ -30,6 +35,8 @@ public class OceniPozicijo {
 					case PRAZNO: break;
 					}
 				}
+				
+				// vsa ostala polja
 				else {
 					switch(tabla[i][j]) {
 					case CRNO: prestejC += 2; break;

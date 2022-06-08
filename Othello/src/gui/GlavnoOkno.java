@@ -7,18 +7,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.EnumMap;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
-
 import logika.Igralec;
 import splosno.KdoIgra;
 import vodja.Vodja;
@@ -55,14 +50,28 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 		JMenu igra_menu = new JMenu("Nova igra");
 		menu_bar.add(igra_menu);
 		
+		// meni za izbiro črnega igralca
 		JMenu crniIgralec = dodajMenu(menu_bar, "Izberite črnega igralca");
+		
+		// meni za izbiro belega igralca
 		JMenu beliIgralec = dodajMenu(menu_bar, "Izberite belega igralca");
 		
+		// črni igralec je človek
 		clovekC = dodajVrstico(crniIgralec, "Človek");
+		
+		// črni igralec je računalnik
 		racunalnikC = dodajVrstico(crniIgralec, "Računalnik");
+		
+		// beli igralec je človek
 		clovekB = dodajVrstico(beliIgralec, "Človek");
+		
+		// beli igralec je računalnik
 		racunalnikB = dodajVrstico(beliIgralec, "Računalnik");
+		
+		// gumb, ki požene igro
 		igramo = dodajGumb(menu_bar, "Nova igra");
+		
+		// pokaže najboljšo potezo / pokaže možne poteze
 		pomoc = dodajGumb(menu_bar, "Pomoč");
 
 		igraClovekRacunalnik = new JMenuItem("Človek vs. računalnik");
@@ -92,7 +101,7 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 		polje_layout.weighty = 1.0;
 		getContentPane().add(polje, polje_layout);
 		
-		// statusna vrstica za sporoÃ„ï¿½ila
+		// statusna vrstica za sporočila
 		status = new JLabel();
 		status.setFont(new Font(status.getFont().getName(),
 							    status.getFont().getStyle(),
@@ -102,10 +111,10 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 		status_layout.gridy = 1;
 		status_layout.anchor = GridBagConstraints.CENTER;
 		getContentPane().add(status, status_layout);
-		
 		status.setText("Izberite igro!");
 		
-		//Šteje diske
+		
+		// Šteje diske
 		stDiskov = new JLabel();
 		stDiskov.setFont(new Font(status.getFont().getName(),
 			    				  status.getFont().getStyle(),
@@ -119,6 +128,7 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 		stDiskov.setText("Črni: 2 * Beli: 2");
 	}
 	
+	// doda podmeni
 	private JMenuItem dodajVrstico (JMenu menu, String naslov) {
 		JMenuItem menuNovi = new JMenuItem(naslov);
 		menu.add(menuNovi);
@@ -126,17 +136,21 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 		return menuNovi;
 	}
 	
+	// doda meni
 	private JMenu dodajMenu (JMenuBar menubar, String naslov) {
 		JMenu menu = new JMenu(naslov);
 		menubar.add(menu);
 		return menu;
 	}
 	
+	// doda gumb
 	private JButton dodajGumb(JMenuBar menubar, String naslov) {
 		JButton gumb = new JButton(naslov);
 		menubar.add(gumb);
+		gumb.addActionListener(this);
 		return gumb;
 	}
+	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -149,7 +163,7 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 				Vodja.kdoIgra.remove(Igralec.CRNI);
 			}
 			Vodja.vrstaIgralca.put(Igralec.CRNI, VrstaIgralca.C);
-			String ime = JOptionPane.showInputDialog(this, "Vaše ime;");
+			String ime = JOptionPane.showInputDialog(this, "VaÃ…Â¡e ime;");
 			Vodja.kdoIgra.put(Igralec.CRNI, new KdoIgra(ime));
 		}
 		else if(source == clovekB) {
@@ -158,7 +172,7 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 				Vodja.kdoIgra.remove(Igralec.CRNI);
 			}
 			Vodja.vrstaIgralca.put(Igralec.BELI, VrstaIgralca.C);
-			String ime = JOptionPane.showInputDialog(this, "Vaše ime;");
+			String ime = JOptionPane.showInputDialog("VaÃ…Â¡e ime;");
 			Vodja.kdoIgra.put(Igralec.BELI, new KdoIgra(ime));
 		}
 		else if(source == racunalnikC) {
@@ -179,6 +193,9 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 		}
 		else if(source == igramo) {
 			Vodja.igramoNovoIgro();
+		}
+		else if(source == pomoc) {
+			
 		}
 		
 		else if(e.getSource() == igraClovekRacunalnik) {
@@ -245,7 +262,10 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 				stDiskov.setText("Črni: " + Vodja.igra.steviloCrnih + " * Beli: " + Vodja.igra.steviloBelih);
 				break;
 			case BLOKIRANO:
-				status.setText("Blokirano!"); break;
+				status.setText("Blokirano! Na potezi je " + Vodja.igra.naPotezi.getIgralca() + 
+						" - " + Vodja.kdoIgra.get(Vodja.igra.naPotezi)); 
+				stDiskov.setText("Črni: " + Vodja.igra.steviloCrnih + " * Beli: " + Vodja.igra.steviloBelih);
+				break;
 			}
 		}
 		polje.repaint();

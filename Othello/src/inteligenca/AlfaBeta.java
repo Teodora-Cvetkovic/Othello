@@ -19,12 +19,14 @@ public class AlfaBeta extends Inteligenca{
 		this.globina = globina;
 	}
 	
+	// računalnik izbere nejboljšo potezo
 	@Override
 	public Poteza izberiPotezo(Igra igra) {
 		OcenjenaPoteza najboljsa = alphabeta(igra, this.globina, ZGUBA, ZMAGA, igra.naPotezi);
 		return najboljsa.poteza;
 	}
 	
+	// poiščemo najboljšo potezo
 	public OcenjenaPoteza alphabeta(Igra igra, int globina, int alpha, int beta, Igralec jaz) {
 		int ocena;
 		if(igra.naPotezi == jaz) ocena = ZGUBA;
@@ -49,6 +51,10 @@ public class AlfaBeta extends Inteligenca{
 					else ocenap = ZGUBA;
 					break;
 				case NEODLOCENO: ocenap = NEODLOCENO; break;
+				case BLOKIRANO: 
+					if(globina == 1) ocena = OceniPozicijo.oceniPozicijo(kopijaIgre, jaz.nasprotni());
+					else ocenap = alphabeta(kopijaIgre, globina - 1, alpha, beta, jaz.nasprotni()).ocena;
+					break;
 				default:
 					if(globina == 1) ocena = OceniPozicijo.oceniPozicijo(kopijaIgre, jaz);
 					else ocenap = alphabeta(kopijaIgre, globina - 1, alpha, beta, jaz).ocena;

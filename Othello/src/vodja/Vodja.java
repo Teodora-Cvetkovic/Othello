@@ -23,13 +23,15 @@ public class Vodja {
 	public static Igra igra = null;
 	
 	public static boolean clovekNaVrsti = false;
+	
 		
-	//po엁ne novo igro
+	// po탑ene novo igro
 	public static void igramoNovoIgro () {
 		igra = new Igra();
 		igramo();
 	}
 	
+	// odigra potezo
 	public static void igramo () {
 		okno.osveziGUI();
 		switch (igra.stanje()) {
@@ -65,8 +67,10 @@ public class Vodja {
 		}
 	}
 	
+	// naredimo "pametnega" ra훾unalnika
 	public static Inteligenca racunalnikovaInteligenca = new AlfaBeta(9);
 
+	// odigra ra훾unalnikovo potezo
 	public static void igrajRacunalnikovoPotezo() {
 		Igra zacetnaIgra = igra;
 		SwingWorker<Poteza, Void> worker = new SwingWorker<Poteza, Void>(){
@@ -89,6 +93,7 @@ public class Vodja {
 		worker.execute();
 	}
 	
+	// odigra 훾lovekovo potezo
 	public static void igrajClovekovoPotezo(Poteza poteza) {
 		if(igra.odigraj(poteza)) clovekNaVrsti = false;
 		igramo();

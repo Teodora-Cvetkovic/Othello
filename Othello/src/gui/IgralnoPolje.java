@@ -3,7 +3,6 @@ package gui;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
@@ -11,7 +10,6 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
-import logika.Igra;
 import logika.Polje;
 import splosno.Poteza;
 import vodja.Vodja;
@@ -20,7 +18,6 @@ import vodja.Vodja;
 public class IgralnoPolje extends JPanel implements MouseListener{
 	
 	private final static double LINE_WIDTH = 0.08;
-//	private double SQUARE_WIDTH = Math.min(getHeight(), getWidth()) / 8;
 	private final static double PADDING = 0.18;
 	
 	private double squareWidth() {
@@ -59,7 +56,7 @@ public class IgralnoPolje extends JPanel implements MouseListener{
 	// nariše možne poteze
 	private void paintM(Graphics2D g2, int i, int j) {
 		double w = squareWidth();
-		double d = w * (1.0 - LINE_WIDTH - 2.0 * PADDING); // premer O
+		double d = w * (1.0 - LINE_WIDTH - 2.0 * PADDING); // premer diska
 		double x = w * (i + 0.5 * LINE_WIDTH + PADDING);
 		double y = w * (j + 0.5 * LINE_WIDTH + PADDING);
 		g2.setColor(Color.GRAY);
@@ -72,6 +69,7 @@ public class IgralnoPolje extends JPanel implements MouseListener{
 		return new Dimension(600, 600);
 	}
 	
+	// narišemo trenutno stanje igre
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D)g;	
@@ -79,6 +77,7 @@ public class IgralnoPolje extends JPanel implements MouseListener{
 		g2.setColor(Color.BLACK);
 		g2.setStroke(new BasicStroke((float) (w * LINE_WIDTH)));
 		
+		// narišemo tablo
 		for (int i = 1; i < 8; i++) {
 			g2.drawLine((int)(i * w),
 					    (int)(0),
@@ -89,6 +88,8 @@ public class IgralnoPolje extends JPanel implements MouseListener{
 					    (int)(8 * w),
 					    (int)(i * w));
 		}
+		
+		// narišemo postavljene diske
 		Polje[][] tabla;
 		if(Vodja.igra != null) {
 			tabla = Vodja.igra.tabla;
@@ -101,12 +102,15 @@ public class IgralnoPolje extends JPanel implements MouseListener{
 					}
 				}
 			}
+			
+			// narišemo možne poteze
 			for(Poteza p : Vodja.igra.izracunajMozne()) {
 				paintM(g2, p.getX(), p.getY());
 			}
 		}
 	}
 
+	// nariše odigrano potezo
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if(Vodja.clovekNaVrsti) {

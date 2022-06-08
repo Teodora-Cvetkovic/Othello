@@ -28,7 +28,8 @@ public class Igra {
 		System.out.println(igra.izracunajMozne());
 	}
 	
-	//naredi novo igro
+	
+	// naredi novo igro
 	public Igra() {
 		tabla = new Polje[8][8];
 		steviloCrnih = steviloBelih = 2;
@@ -43,7 +44,8 @@ public class Igra {
 		izvedenePoteze  = new HashSet<Poteza>();
 	}
 	
-	//naredi kopijo igre
+	
+	// naredi kopijo igre
 	public Igra(Igra igra) {
 		this.tabla = new Polje[8][8];
 		this.steviloCrnih = igra.steviloCrnih;
@@ -57,21 +59,28 @@ public class Igra {
 		this.izvedenePoteze  = igra.izvedenePoteze;
 	}
 	
-	//izračuna možne poteze
+	
+	// izračuna možne poteze
 	public List<Poteza> izracunajMozne () {
 		List<Poteza> mozne = new ArrayList<Poteza>();
 		Igralec nasprotnik = naPotezi.nasprotni();
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
+				
+				// če polje ni prazno, gre na naslednje polje
 				if(tabla[i][j] != Polje.PRAZNO) continue;
 				for(int k =0; k<8; k++) {
 					int a = 1;
+					
+					// štejemo nasprotnikove diske
 					while (true) {
 						int x = i + a * smeri[k][0];
 						int y = j + a * smeri[k][1];
 						if (x < 0 || x >= 8 || y < 0 || y >= 8 || tabla[x][y] != nasprotnik.getPolje()) break;
 						a++;	
 					}
+					
+					// če je a = 1, nima nasprotnikovih diskov v tisti smeri
 					if (a == 1) continue;
 					int x = i + a * smeri[k][0];
 					int y = j + a * smeri[k][1];
@@ -87,15 +96,27 @@ public class Igra {
 		return mozne;
 	}
 	
+	
 	//odigra potezo
 	public boolean odigraj(Poteza p) {
-		if(p == null) return false;
+		
+		// če ni možnih potez, preda potezo nasprotniku
+		if(p == null || izracunajMozne().isEmpty()) {
+			naPotezi = naVrsti();
+			return true;
+		}
 		int x = p.getX();
 		int y = p.getY();
 		Igralec nasprotnik = naPotezi.nasprotni();
+		
+		// preverimo, če je poteza p možna
 		if (izracunajMozne().contains(p)) {
-			if (naPotezi == Igralec.CRNI)steviloCrnih += 1;
+			
+			// če je poteza p možna, dodamo ustrezni disk
+			if (naPotezi == Igralec.CRNI) steviloCrnih += 1;
 			else steviloBelih += 1;
+			
+			// preštejemo nasprotnikove diske
 			for(int k = 0; k < 8; k++) {
 				int a = 1;
 				while (true) {
@@ -104,11 +125,17 @@ public class Igra {
 					if (u < 0 || u >= 8 || v < 0 || v >= 8 || tabla[u][v] != nasprotnik.getPolje()) break;
 					a++;	
 				}
+				
+				// če je a = 1, ni nasprotnikovih diskov
 				if (a == 1) continue;
 				int u = x + a * smeri[k][0];
 				int v = y + a * smeri[k][1];
 				if(u >= 0 && u < 8 && v >= 0 && v < 8 && tabla[u][v] == naPotezi.getPolje()) {
+					
+					// nasprotnikovi diski postanejo naši
 					for(int i = 0; i < a; i++) tabla[x + i * smeri[k][0]][y + i * smeri[k][1]] = naPotezi.getPolje();
+					
+					//preštejemo še naše in nasprotnikove diske
 					if (naPotezi == Igralec.CRNI) {
 						steviloCrnih += a - 1;
 						steviloBelih -= a - 1;
@@ -126,10 +153,14 @@ public class Igra {
 		return false;
 	}
 	
-	//preveri, ali je konec
+	
+	// preveri, ali je konec igre - če noben igralec nima možne poteze, iigra je končana
 	public boolean konec() {
+		// preveri, ali igralec na potezi ima mozne poteze
 		if (izracunajMozne().isEmpty()) {
 			naPotezi = naPotezi.nasprotni();
+			
+			// preveri, ali igralec na potezi ima mozne poteze
 			if (izracunajMozne().isEmpty()) {
 				naPotezi = naPotezi.nasprotni();
 				return true;
@@ -139,20 +170,28 @@ public class Igra {
 		return false;
 	}
 	
-	//pogleda stanje igre
+	
+	// pogleda stanje igre
 	public Stanje stanje() {
-		//Ali imamo zmagovalca?
+		// ali imamo zmagovalca?
 		if (konec()) {
 			if(steviloCrnih < steviloBelih) return Stanje.ZMAGA_BELI;
 			else if(steviloCrnih > steviloBelih) return Stanje.ZMAGA_CRNI;
 			else return Stanje.NEODLOCENO;
 		}
-		//Ali igralec na potezi ima moÅ¾ne poteze
+		// ali igralec na potezi ima možne poteze
 		if (izracunajMozne().isEmpty()) {
 			naPotezi = naPotezi.nasprotni();
 			if (!izracunajMozne().isEmpty()) return Stanje.BLOKIRANO;
+//			naPotezi = naPotezi.nasprotni();
 		}
 		return Stanje.V_TEKU;
+	}
+	
+	// če je stanje blokirano, na potezi je nasprotnik
+	public Igralec naVrsti() {
+		if(stanje() == Stanje.BLOKIRANO) return naPotezi.nasprotni();
+		else return naPotezi;
 	}
 	
 	public HashSet<Poteza> mnozicaIzvedenihPotez() {
@@ -175,6 +214,6 @@ public class Igra {
 				}
 			}
 		}
-		System.out.println("Å tevilo Ä�rnih: " + steviloCrnih + "; Å tevilo belih: " + steviloBelih);
+		System.out.println("Število črnih: " + steviloCrnih + " || Število belih: " + steviloBelih);
 	}
 }

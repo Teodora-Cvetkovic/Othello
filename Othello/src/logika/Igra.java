@@ -185,6 +185,7 @@ public class Igra {
 			if (!izracunajMozne().isEmpty()) return Stanje.BLOKIRANO;
 //			naPotezi = naPotezi.nasprotni();
 		}
+		if(koncaj()) return Stanje.USTAVLJENO;
 		return Stanje.V_TEKU;
 	}
 	
@@ -196,6 +197,13 @@ public class Igra {
 	
 	public HashSet<Poteza> mnozicaIzvedenihPotez() {
 		return izvedenePoteze;
+	}
+	
+	public boolean koncaj() {
+		izracunajMozne().clear();
+		naPotezi = naPotezi.nasprotni();
+		izracunajMozne().clear();
+		return true;
 	}
 	
 	//izpiše trenutno tablo

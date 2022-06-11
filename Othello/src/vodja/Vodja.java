@@ -38,6 +38,7 @@ public class Vodja {
 		case ZMAGA_CRNI: 
 		case ZMAGA_BELI: 
 		case NEODLOCENO: 
+		case USTAVLJENO:
 			return; // odhajamo iz metode igramo
 		case V_TEKU: 
 			Igralec igralec = igra.naPotezi;
@@ -68,7 +69,7 @@ public class Vodja {
 	}
 	
 	// naredimo "pametnega" računalnika
-	public static Inteligenca racunalnikovaInteligenca = new AlfaBeta(9);
+	public static Inteligenca racunalnikovaInteligenca = new AlfaBeta(5);
 
 	// odigra računalnikovo potezo
 	public static void igrajRacunalnikovoPotezo() {

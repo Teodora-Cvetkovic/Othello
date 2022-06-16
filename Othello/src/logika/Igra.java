@@ -1,19 +1,18 @@
 package logika;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import splosno.Poteza;
 
 public class Igra {
 	
-	public int steviloCrnih;
-	public int steviloBelih;
-	public Polje [][] tabla;
-	public static int[][] smeri = {{0,1}, {0,-1}, {1,0}, {-1,0}, {1,1}, {-1,-1}, {1,-1}, {-1,1}};
-	public Igralec naPotezi;
-	public HashSet<Poteza> izvedenePoteze;
+	public int steviloCrnih; // število črnih diskov
+	public int steviloBelih; // število belih diskov
+	public Polje [][] tabla; // igralna tabla
+	public static int[][] smeri = {{0,1}, {0,-1}, {1,0}, {-1,0}, {1,1}, {-1,-1}, {1,-1}, {-1,1}}; // možne smeri igranja
+	public Igralec naPotezi; // igralec, ki je na potezi
 
+	
 	public static void main(String[] args) {
 		Igra igra = new Igra();
 		Poteza p1 = new Poteza(2, 3);
@@ -41,7 +40,6 @@ public class Igra {
 			}
 		}
 		naPotezi = Igralec.CRNI;
-		izvedenePoteze  = new HashSet<Poteza>();
 	}
 	
 	
@@ -56,7 +54,6 @@ public class Igra {
 			}
 		}
 		this.naPotezi = igra.naPotezi;
-		this.izvedenePoteze  = igra.izvedenePoteze;
 	}
 	
 	
@@ -102,7 +99,7 @@ public class Igra {
 		
 		// če ni možnih potez, preda potezo nasprotniku
 		if(p == null || izracunajMozne().isEmpty()) {
-			naPotezi = naVrsti();
+			dajNasprotniku();
 			return true;
 		}
 		int x = p.getX();
@@ -146,7 +143,6 @@ public class Igra {
 					}
 				}
 			}
-			izvedenePoteze.add(p);
 			naPotezi = nasprotnik;
 			return true;
 		}
@@ -166,7 +162,6 @@ public class Igra {
 				return true;
 			}
 		}
-		naPotezi = naPotezi.nasprotni();
 		return false;
 	}
 	
@@ -180,31 +175,16 @@ public class Igra {
 			else return Stanje.NEODLOCENO;
 		}
 		// ali igralec na potezi ima možne poteze
-		if (izracunajMozne().isEmpty()) {
-			naPotezi = naPotezi.nasprotni();
-			if (!izracunajMozne().isEmpty()) return Stanje.BLOKIRANO;
-//			naPotezi = naPotezi.nasprotni();
-		}
-		if(koncaj()) return Stanje.USTAVLJENO;
+		if (izracunajMozne().isEmpty()) return Stanje.BLOKIRANO;
 		return Stanje.V_TEKU;
 	}
+
 	
-	// če je stanje blokirano, na potezi je nasprotnik
-	public Igralec naVrsti() {
-		if(stanje() == Stanje.BLOKIRANO) return naPotezi.nasprotni();
-		else return naPotezi;
-	}
-	
-	public HashSet<Poteza> mnozicaIzvedenihPotez() {
-		return izvedenePoteze;
-	}
-	
-	public boolean koncaj() {
-		izracunajMozne().clear();
+	// predamo potezo nasprotniku
+	public void dajNasprotniku() {
 		naPotezi = naPotezi.nasprotni();
-		izracunajMozne().clear();
-		return true;
-	}
+		}
+
 	
 	//izpiše trenutno tablo
 	private void izpisPlosce() {

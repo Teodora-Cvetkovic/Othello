@@ -109,6 +109,7 @@ public class IgralnoPolje extends JPanel implements MouseListener{
 			}
 		}
 	}
+	
 
 	// nariše odigrano potezo
 	@Override

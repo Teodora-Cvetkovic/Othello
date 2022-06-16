@@ -17,60 +17,54 @@ public class Vodja {
 
 	public static Map<Igralec,VrstaIgralca> vrstaIgralca;
 	public static Map<Igralec,KdoIgra> kdoIgra;
-	
 	public static GlavnoOkno okno;
-	
 	public static Igra igra = null;
-	
 	public static boolean clovekNaVrsti = false;
+	public static boolean vTeku = false;
 	
 		
 	// požene novo igro
 	public static void igramoNovoIgro () {
 		igra = new Igra();
+		vTeku = true;
 		igramo();
 	}
 	
+	
 	// odigra potezo
 	public static void igramo () {
-		okno.osveziGUI();
-		switch (igra.stanje()) {
-		case ZMAGA_CRNI: 
-		case ZMAGA_BELI: 
-		case NEODLOCENO: 
-		case USTAVLJENO:
-			return; // odhajamo iz metode igramo
-		case V_TEKU: 
-			Igralec igralec = igra.naPotezi;
-			VrstaIgralca vrstaNaPotezi = vrstaIgralca.get(igralec);
-			switch (vrstaNaPotezi) {
-			case C: 
-				clovekNaVrsti = true;
+		if(vTeku) {
+			okno.osveziGUI();
+			switch (igra.stanje()) {
+			case ZMAGA_CRNI: 
+			case ZMAGA_BELI: 
+			case NEODLOCENO: 
+				return; // odhajamo iz metode igramo
+			case V_TEKU: 
+				Igralec igralec = igra.naPotezi;
+				VrstaIgralca vrstaNaPotezi = vrstaIgralca.get(igralec);
+				switch (vrstaNaPotezi) {
+				case C: 
+					clovekNaVrsti = true;
+					break;
+				case R:
+					clovekNaVrsti = false;
+					igrajRacunalnikovoPotezo();
+					break;
+				}
 				break;
-			case R:
-				clovekNaVrsti = false;
-				igrajRacunalnikovoPotezo();
+			case BLOKIRANO: 
+				igra.dajNasprotniku();
 				break;
-			}
-			break;
-		case BLOKIRANO: 
-			Igralec nasprotni = igra.naPotezi.nasprotni();
-			VrstaIgralca vrstaNasprotni = vrstaIgralca.get(nasprotni);
-			switch (vrstaNasprotni) {
-			case C: 
-				clovekNaVrsti = true;
-				break;
-			case R:
-				clovekNaVrsti = false;
-				igrajRacunalnikovoPotezo();
-				break;
-			}
+		}
 		}
 	}
 	
+	
 	// naredimo "pametnega" računalnika
-	public static Inteligenca racunalnikovaInteligenca = new AlfaBeta(5);
+	public static Inteligenca racunalnikovaInteligenca = new AlfaBeta(9);
 
+	
 	// odigra računalnikovo potezo
 	public static void igrajRacunalnikovoPotezo() {
 		Igra zacetnaIgra = igra;
@@ -93,6 +87,7 @@ public class Vodja {
 		};
 		worker.execute();
 	}
+	
 	
 	// odigra človekovo potezo
 	public static void igrajClovekovoPotezo(Poteza poteza) {

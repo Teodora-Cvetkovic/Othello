@@ -16,7 +16,7 @@ public class Inteligenca extends KdoIgra {
 	private int globina;
 
 	public Inteligenca () {
-		super("Teodora Cvetković in Vesna Hozjan");
+		super("Teodora in Vesna");
 		this.globina = 9;
 	}
 	

@@ -52,11 +52,16 @@ public class AlfaBeta extends Inteligenca{
 					break;
 				case NEODLOCENO: ocenap = NEODLOCENO; break;
 				case BLOKIRANO: 
-					if(globina == 1) ocena = OceniPozicijo.oceniPozicijo(kopijaIgre, jaz.nasprotni());
-					else ocenap = alphabeta(kopijaIgre, globina - 1, alpha, beta, jaz.nasprotni()).ocena;
+					if(globina == 1) ocenap = OceniPozicijo.oceniPozicijo(kopijaIgre, jaz);
+					else {
+						kopijaIgre.dajNasprotniku();
+						if(globina == 2) ocenap = OceniPozicijo.oceniPozicijo(kopijaIgre, jaz);
+						else ocenap = alphabeta(kopijaIgre, globina - 2, alpha, beta, jaz).ocena;
+					}
+					
 					break;
 				default:
-					if(globina == 1) ocena = OceniPozicijo.oceniPozicijo(kopijaIgre, jaz);
+					if(globina == 1) ocenap = OceniPozicijo.oceniPozicijo(kopijaIgre, jaz);
 					else ocenap = alphabeta(kopijaIgre, globina - 1, alpha, beta, jaz).ocena;
 				}
 				if(igra.naPotezi == jaz) {

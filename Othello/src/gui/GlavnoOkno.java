@@ -43,30 +43,39 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 		JMenuBar menu_bar = new JMenuBar();
 		this.setJMenuBar(menu_bar);
 		
+		
 		// meni za izbiro črnega igralca
 		JMenu crniIgralec = dodajMenu(menu_bar, "Izberite črnega igralca");
+		
 		
 		// meni za izbiro belega igralca
 		JMenu beliIgralec = dodajMenu(menu_bar, "Izberite belega igralca");
 		
+		
 		// črni igralec je človek
 		clovekC = dodajVrstico(crniIgralec, "Človek");
+		
 		
 		// črni igralec je računalnik
 		racunalnikC = dodajVrstico(crniIgralec, "Računalnik");
 		
+		
 		// beli igralec je človek
 		clovekB = dodajVrstico(beliIgralec, "Človek");
+		
 		
 		// beli igralec je računalnik
 		racunalnikB = dodajVrstico(beliIgralec, "Računalnik");
 		
+		
 		// gumb, ki požene igro
 		igramo = dodajGumb(menu_bar, "Nova igra");
+		
 		
 		// gumb, ki ustavi igro
 		stop = dodajGumb(menu_bar, "Ustavi igro");
 
+		
 		// igralno polje
 		polje = new IgralnoPolje();
 		GridBagConstraints polje_layout = new GridBagConstraints();
@@ -76,6 +85,7 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 		polje_layout.weightx = 1.0;
 		polje_layout.weighty = 1.0;
 		getContentPane().add(polje, polje_layout);
+		
 		
 		// statusna vrstica za sporočila
 		status = new JLabel();
@@ -104,6 +114,7 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 		stDiskov.setText("Črni: 2  ||  Beli: 2");
 	}
 	
+	
 	// doda podmeni
 	private JMenuItem dodajVrstico (JMenu menu, String naslov) {
 		JMenuItem menuNovi = new JMenuItem(naslov);
@@ -112,12 +123,14 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 		return menuNovi;
 	}
 	
+	
 	// doda meni
 	private JMenu dodajMenu (JMenuBar menubar, String naslov) {
 		JMenu menu = new JMenu(naslov);
 		menubar.add(menu);
 		return menu;
 	}
+	
 	
 	// doda gumb
 	private JButton dodajGumb(JMenuBar menubar, String naslov) {
@@ -127,9 +140,11 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 		return gumb;
 	}
 	
+	
 	// pomožni množici, kjer shranjujemo, vrsto igralca in kdo je na potezi
 	EnumMap<Igralec, VrstaIgralca> pomozna1 = new EnumMap<Igralec, VrstaIgralca>(Igralec.class);
 	EnumMap<Igralec, KdoIgra> pomozna2 = new EnumMap<Igralec, KdoIgra>(Igralec.class);
+	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -178,12 +193,14 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 			Vodja.igramoNovoIgro();
 		}
 		else if(source == stop) {
-			Vodja.igra.koncaj();
+			Vodja.vTeku = false;
 			pomozna1.clear();
 			pomozna2.clear();
 		}
 	}
 
+	
+	// osveži vmesnik z novim stanjem igre
 	public void osveziGUI() {
 		if (Vodja.igra == null) {
 			status.setText("Igra ni v teku.");
@@ -196,32 +213,28 @@ public class GlavnoOkno extends JFrame implements ActionListener{
 				pomozna2.clear();
 				break;
 			case V_TEKU: 
-				status.setText("Na potezi je " + Vodja.igra.naPotezi.nasprotni().getIgralca() + 
-						" - " + Vodja.kdoIgra.get(Vodja.igra.naPotezi.nasprotni())); 
-				stDiskov.setText("Črni: " + Vodja.igra.steviloCrnih + " * Beli: " + Vodja.igra.steviloBelih);
+				status.setText("Na potezi je " + Vodja.igra.naPotezi.getIgralca() + 
+						" - " + Vodja.kdoIgra.get(Vodja.igra.naPotezi)); 
+				stDiskov.setText("Črni: " + Vodja.igra.steviloCrnih + "  ||  Beli: " + Vodja.igra.steviloBelih);
 				break;
 			case ZMAGA_CRNI: 
-				status.setText("Zmagal je Črni - " + 
+				status.setText("Zmagal je ČRNI igralec - " + 
 						Vodja.kdoIgra.get(Vodja.igra.naPotezi.nasprotni()));
-				stDiskov.setText("Črni: " + Vodja.igra.steviloCrnih + " * Beli: " + Vodja.igra.steviloBelih);
+				stDiskov.setText("Črni: " + Vodja.igra.steviloCrnih + "  ||  Beli: " + Vodja.igra.steviloBelih);
 				pomozna1.clear();
 				pomozna2.clear();
 				break;
 			case ZMAGA_BELI: 
-				status.setText("Zmagal je Beli - " + 
+				status.setText("Zmagal je BELI igralec - " + 
 						Vodja.kdoIgra.get(Vodja.igra.naPotezi.nasprotni()));
-				stDiskov.setText("Črni: " + Vodja.igra.steviloCrnih + " * Beli: " + Vodja.igra.steviloBelih);
+				stDiskov.setText("Črni: " + Vodja.igra.steviloCrnih + "  ||  Beli: " + Vodja.igra.steviloBelih);
 				pomozna1.clear();
 				pomozna2.clear();
 				break;
 			case BLOKIRANO:
 				status.setText("Blokirano! Na potezi je " + Vodja.igra.naPotezi.getIgralca() + 
 						" - " + Vodja.kdoIgra.get(Vodja.igra.naPotezi)); 
-				stDiskov.setText("Črni: " + Vodja.igra.steviloCrnih + " * Beli: " + Vodja.igra.steviloBelih);
-				break;
-			case USTAVLJENO:
-				status.setText("Igra je bila ustavljena. Izberite novo igro."); 
-				stDiskov.setText("Črni: " + Vodja.igra.steviloCrnih + " * Beli: " + Vodja.igra.steviloBelih);
+				stDiskov.setText("Črni: " + Vodja.igra.steviloCrnih + "  ||  Beli: " + Vodja.igra.steviloBelih);
 				break;
 			}
 		}
